@@ -1,10 +1,10 @@
 public class AdiLinkedList<E>
 {
-    private static class AdiLinkedListNode<EE> {
-        public AdiLinkedListNode<EE> prev;
-        public AdiLinkedListNode<EE> next;
-        public EE val;
-        public AdiLinkedListNode(AdiLinkedListNode<EE> prev, AdiLinkedListNode<EE> next, EE val) {
+    private static class AdiLinkedListNode<E> {
+        public AdiLinkedListNode<E> prev;
+        public AdiLinkedListNode<E> next;
+        public E val;
+        public AdiLinkedListNode(AdiLinkedListNode<E> prev, AdiLinkedListNode<E> next, E val) {
             this.prev = prev;
             this.next = next;
             this.val = val;
