@@ -1,3 +1,6 @@
+import java.util.ListIterator;
+import java.lang.IllegalStateException;
+
 public class AdiLinkedList<E>
 {
     private static class AdiLinkedListNode<E> {
@@ -8,6 +11,73 @@ public class AdiLinkedList<E>
             this.prev = prev;
             this.next = next;
             this.val = val;
+        }
+    }
+    private class AdiLinkedListIterator implements ListIterator<E>{
+        private int nextIndex = 0;
+        private AdiLinkedListNode<E> nextElement = head;
+        private AdiLinkedListNode<E> lastPrevNext = null;
+        public boolean hasNext() {
+            return nextIndex < size;
+        }
+        public E next() {
+            lastPrevNext = nextElement;
+            nextIndex++;
+            nextElement = nextElement.next;
+            return lastPrevNext.val;
+        }
+        public boolean hasPrevious() {
+            return nextIndex > 0;
+        }
+        public E previous() {
+            nextIndex--;
+            nextElement = nextElement.prev;
+            lastPrevNext = nextElement;
+            return lastPrevNext.val;
+        }
+        public int nextIndex() {
+            return nextIndex;
+        }
+        public int previousIndex() {
+            return nextIndex-1;
+        }
+        public void remove() {
+            if (lastPrevNext == null) {
+                throw new IllegalStateException();
+            } else {
+                nextIndex--;
+                if (lastPrevNext == head) {
+                    removeHead();
+                } else if (lastPrevNext == tail) {
+                    removeTail();
+                } else {
+                    lastPrevNext.prev.next = lastPrevNext.next;
+                    lastPrevNext.next.prev = lastPrevNext.prev;
+                    size--;
+                }
+                lastPrevNext = null;
+            }
+        }
+        public void set(E val) {
+            if (lastPrevNext == null) {
+                throw new IllegalStateException();
+            } else {
+                lastPrevNext.val = val;
+            }
+        }
+        public void add(E val) {
+            if (!hasPrevious()) {
+                insertHead(val);
+            } else if (!hasNext()) {
+                insertTail(val);
+            } else {
+                AdiLinkedListNode<E> toBeInserted = new AdiLinkedListNode<E>(nextElement.prev,nextElement,val);
+                toBeInserted.prev.next = toBeInserted;
+                toBeInserted.next.prev = toBeInserted;
+                size++;
+            }
+            nextIndex++;
+            lastPrevNext = null;
         }
     }
     private AdiLinkedListNode<E> head;
@@ -115,6 +185,10 @@ public class AdiLinkedList<E>
         toBeRemoved.prev.next = toBeRemoved.next;
         toBeRemoved.next.prev = toBeRemoved.prev;
         size--;
+    }
+    
+    public ListIterator<E> listiterator() {
+        return new AdiLinkedListIterator();
     }
 
 }
