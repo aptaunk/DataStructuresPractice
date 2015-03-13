@@ -31,7 +31,7 @@ public class AdiLinkedList<E>
         }
         public E previous() {
             nextIndex--;
-            nextElement = nextElement.prev;
+            nextElement = nextElement==null?tail:nextElement.prev;
             lastPrevNext = nextElement;
             return lastPrevNext.val;
         }
@@ -54,6 +54,9 @@ public class AdiLinkedList<E>
                     lastPrevNext.prev.next = lastPrevNext.next;
                     lastPrevNext.next.prev = lastPrevNext.prev;
                     size--;
+                }
+                if (nextElement == lastPrevNext) {
+                    nextElement = nextElement.next;
                 }
                 lastPrevNext = null;
             }
@@ -157,6 +160,8 @@ public class AdiLinkedList<E>
         head = head.next;
         if (head != null) {
             head.prev = null;
+        } else {
+            tail = null;
         }
         size--;
     }
@@ -165,6 +170,8 @@ public class AdiLinkedList<E>
         tail = tail.prev;
         if (tail != null) {
             tail.next = null;
+        } else {
+            head = null;
         }
         size--;
     }
