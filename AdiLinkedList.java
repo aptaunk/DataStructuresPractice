@@ -101,8 +101,16 @@ public class AdiLinkedList<E>
         return head.val;
     }
     
+    public void setHead(E val) {
+        head.val = val;
+    }
+    
     public E getTail() {
         return tail.val;
+    }
+    
+    public void setTail(E val) {
+        tail.val = val;
     }
     
     public E getAtIndex(int index) {
@@ -111,6 +119,14 @@ public class AdiLinkedList<E>
             toBeReturned = toBeReturned.next;
         }
         return toBeReturned.val;
+    }
+    
+    public void setAtIndex(int index, E val) {
+        AdiLinkedListNode<E> toBeSet = head;
+        for (int i=0; i<index; i++) {
+            toBeSet = toBeSet.next;
+        }
+        toBeSet.val = val;
     }
     
     public void insertHead(E val) {
