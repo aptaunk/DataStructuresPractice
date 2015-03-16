@@ -53,7 +53,7 @@ public class AdiDynamicArray<E>
     
     public void insert(E e) {
         elmentArray[size] = e;
-        if (size == elmentArray.length) {
+        if (size == elmentArray.length-1) {
             expand();
         }
         size++;
