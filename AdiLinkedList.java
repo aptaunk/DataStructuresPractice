@@ -1,7 +1,8 @@
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.lang.IllegalStateException;
 
-public class AdiLinkedList<E>
+public class AdiLinkedList<E> implements Iterable<E>
 {
     private static class AdiLinkedListNode<E> {
         public AdiLinkedListNode<E> prev;
@@ -212,6 +213,10 @@ public class AdiLinkedList<E>
     
     public ListIterator<E> listiterator() {
         return new AdiLinkedListIterator();
+    }
+    
+    public Iterator<E> iterator() {
+        return listiterator();
     }
 
 }
