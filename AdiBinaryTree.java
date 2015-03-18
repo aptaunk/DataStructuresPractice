@@ -1,4 +1,6 @@
-public class AdiBinaryTree<K extends Comparable<K>,V>
+import java.util.Iterator;
+
+public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
 {
     private static class AdiBinaryTreeNode<K,V> {
         public AdiBinaryTreeNode<K,V> left;
@@ -29,9 +31,9 @@ public class AdiBinaryTree<K extends Comparable<K>,V>
         while (true) {
             if (n == null) {
                 return null;
-            } else if (n.key.compareTo(key) < 0) {
+            } else if (key.compareTo(n.key) < 0) {
                 n = n.left;
-            } else if (n.key.compareTo(key) > 0) {
+            } else if (key.compareTo(n.key) > 0) {
                 n = n.right;
             } else {
                 return n;
@@ -58,14 +60,14 @@ public class AdiBinaryTree<K extends Comparable<K>,V>
         }
         AdiBinaryTreeNode<K,V> n = root;
         while (true) {
-            if (n.key.compareTo(key) < 0) {
+            if (key.compareTo(n.key) < 0) {
                 if (n.left == null) {
                     n.left = new AdiBinaryTreeNode<K,V>(n,key,val);
                     return;
                 } else {
                     n = n.left;
                 }
-            } else if (n.key.compareTo(key) > 0) {
+            } else if (key.compareTo(n.key) > 0) {
                 if (n.right == null) {
                     n.right = new AdiBinaryTreeNode<K,V>(n,key,val);
                     return;
@@ -159,5 +161,48 @@ public class AdiBinaryTree<K extends Comparable<K>,V>
             return;
         }
         remove(search(key));
+    }
+    
+    public Iterator<K> iterator() {
+        return new Iterator<K>() {
+            private AdiDynamicArray<AdiBinaryTreeNode<K,V>> bstIteratorStack;
+            private AdiBinaryTreeNode<K,V> nextNode;
+            private K currKey;
+            {
+                bstIteratorStack = new AdiDynamicArray<AdiBinaryTreeNode<K,V>>();
+                nextNode = root;
+                while (nextNode.left != null) {
+                    bstIteratorStack.insert(nextNode);
+                    nextNode = nextNode.left;
+                }
+                currKey = null;
+            }
+            public boolean hasNext() {
+                return nextNode != null;
+            }
+            public K next() {
+                currKey = nextNode.key;
+                if (nextNode.right != null) {
+                    nextNode = nextNode.right;
+                    while (nextNode.left != null) {
+                        bstIteratorStack.insert(nextNode);
+                        nextNode = nextNode.left;
+                    }
+                } else {
+                    nextNode = bstIteratorStack.getSize()==0?null:bstIteratorStack.get(bstIteratorStack.getSize()-1);
+                    if (bstIteratorStack.getSize()>0) {
+                        bstIteratorStack.remove();
+                    }
+                }
+                return currKey;
+            }
+            public void remove() {
+                if (currKey == null) {
+                    throw new IllegalStateException();
+                }
+                AdiBinaryTree.this.remove(currKey);
+                currKey = null;
+            }
+        };
     }
 }
