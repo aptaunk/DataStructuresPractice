@@ -217,6 +217,7 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return nextNode != null;
             }
             public K next() {
+                lastContains = nextNode;
                 currKey = nextNode.key;
                 if (nextNode.right != null) {
                     bstIteratorStack.insert(nextNode.right);
@@ -232,6 +233,7 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return currKey;
             }
             public void remove() {
+                lastContains = null;
                 if (currKey == null) {
                     throw new IllegalStateException();
                 }
@@ -260,6 +262,7 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return nextNode != null;
             }
             public K next() {
+                lastContains = nextNode;
                 currKey = nextNode.key;
                 if (nextNode.left != null) {
                     nextLevel.insert(nextNode.left);
@@ -278,6 +281,7 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return currKey;
             }
             public void remove() {
+                lastContains = null;
                 if (currKey == null) {
                     throw new IllegalStateException();
                 }
@@ -308,6 +312,7 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return nextNode != null;
             }
             public K next() {
+                lastContains = nextNode;
                 currKey = nextNode.key;
                 if (nextNode.right != null) {
                     nextNode = nextNode.right;
@@ -324,6 +329,7 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return currKey;
             }
             public void remove() {
+                lastContains = null;
                 if (currKey == null) {
                     throw new IllegalStateException();
                 }
