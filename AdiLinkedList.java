@@ -46,7 +46,7 @@ public class AdiLinkedList<E> implements Iterable<E>
             if (lastPrevNext == null) {
                 throw new IllegalStateException();
             } else {
-                nextIndex--;
+                nextIndex = nextIndex==0?nextIndex:nextIndex-1;
                 if (lastPrevNext == head) {
                     removeHead();
                 } else if (lastPrevNext == tail) {
