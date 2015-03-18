@@ -336,6 +336,14 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
         };
     }
     
+    public int getIteratorType() {
+        return iteratorType;
+    }
+    
+    public void setIteratorType(int i) {
+        iteratorType = i;
+    }
+    
     public Iterator<K> iterator() {
         if (iteratorType == IN_ORDER) {
             return inOrderIterator();
