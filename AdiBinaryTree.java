@@ -18,10 +18,46 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
     
     private AdiBinaryTreeNode<K,V> root;
     private AdiBinaryTreeNode<K,V> lastContains;
+    private Iterator<K> emptyIterator;
+    
+    public static final int IN_ORDER = 0;
+    public static final int DEPTH_FIRST = 1;
+    public static final int BREDTH_FIRST = 2;
+    
+    private int iteratorType;
     
     public AdiBinaryTree() {
-        root = null;
-        lastContains = null;
+        this.root = null;
+        this.lastContains = null;
+        this.emptyIterator = new Iterator<K>() {
+            public boolean hasNext() {
+                return false;
+            }
+            public K next() {
+                throw new NoSuchElementException();
+            }
+            public void remove() {
+                throw new IllegalStateException();
+            }
+        };
+        this.iteratorType = DEPTH_FIRST;
+    }
+    
+    public AdiBinaryTree(int iteratorType) {
+        this.root = null;
+        this.lastContains = null;
+        this.emptyIterator = new Iterator<K>() {
+            public boolean hasNext() {
+                return false;
+            }
+            public K next() {
+                throw new NoSuchElementException();
+            }
+            public void remove() {
+                throw new IllegalStateException();
+            }
+        };
+        this.iteratorType = iteratorType;
     }
     
     private AdiBinaryTreeNode<K,V> search(K key) {
@@ -164,19 +200,96 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
         remove(search(key));
     }
     
-    public Iterator<K> iterator() {
+    public Iterator<K> depthFirstIterator() {
         if (root == null) {
-            return new Iterator<K>() {
-                public boolean hasNext() {
-                    return false;
+            return emptyIterator;
+        }
+        return new Iterator<K>() {
+            private AdiDynamicArray<AdiBinaryTreeNode<K,V>> bstIteratorStack;
+            private AdiBinaryTreeNode<K,V> nextNode;
+            private K currKey;
+            {
+                bstIteratorStack = new AdiDynamicArray<AdiBinaryTreeNode<K,V>>();
+                nextNode = root;
+                currKey = null;
+            }
+            public boolean hasNext() {
+                return nextNode != null;
+            }
+            public K next() {
+                currKey = nextNode.key;
+                if (nextNode.right != null) {
+                    bstIteratorStack.insert(nextNode.right);
                 }
-                public K next() {
-                    throw new NoSuchElementException();
+                if (nextNode.left != null) {
+                    nextNode = nextNode.left;
+                } else {
+                    nextNode = bstIteratorStack.getSize()==0?null:bstIteratorStack.get(bstIteratorStack.getSize()-1);
+                    if (bstIteratorStack.getSize()>0) {
+                        bstIteratorStack.remove();
+                    }
                 }
-                public void remove() {
+                return currKey;
+            }
+            public void remove() {
+                if (currKey == null) {
                     throw new IllegalStateException();
                 }
-            };
+                AdiBinaryTree.this.remove(currKey);
+                currKey = null;
+            }
+        };
+    }
+    
+    public Iterator<K> bredthFirstIterator() {
+        if (root == null) {
+            return emptyIterator;
+        }
+        return new Iterator<K>() {
+            private AdiDynamicArray<AdiBinaryTreeNode<K,V>> currentLevel;
+            private AdiDynamicArray<AdiBinaryTreeNode<K,V>> nextLevel;
+            private AdiBinaryTreeNode<K,V> nextNode;
+            private K currKey;
+            {
+                currentLevel = new AdiDynamicArray<AdiBinaryTreeNode<K,V>>();
+                nextLevel = new AdiDynamicArray<AdiBinaryTreeNode<K,V>>();
+                nextNode = root;
+                currKey = null;
+            }
+            public boolean hasNext() {
+                return nextNode != null;
+            }
+            public K next() {
+                currKey = nextNode.key;
+                if (nextNode.left != null) {
+                    nextLevel.insert(nextNode.left);
+                }
+                if (nextNode.right != null) {
+                    nextLevel.insert(nextNode.right);
+                } 
+                if (currentLevel.getSize()==0) {
+                    currentLevel = nextLevel;
+                    nextLevel = new AdiDynamicArray<AdiBinaryTreeNode<K,V>>(); 
+                }
+                nextNode = currentLevel.getSize()==0?null:currentLevel.get(currentLevel.getSize()-1);
+                if (currentLevel.getSize()>0) {
+                    currentLevel.remove();
+                }
+                return currKey;
+            }
+            public void remove() {
+                if (currKey == null) {
+                    throw new IllegalStateException();
+                }
+                AdiBinaryTree.this.remove(currKey);
+                currKey = null;
+            }
+        };
+    }
+    
+    public Iterator<K> inOrderIterator() {
+        if (root == null) {
+            return emptyIterator;
         }
         return new Iterator<K>() {
             private AdiDynamicArray<AdiBinaryTreeNode<K,V>> bstIteratorStack;
@@ -218,5 +331,17 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 currKey = null;
             }
         };
+    }
+    
+    public Iterator<K> iterator() {
+        if (iteratorType == IN_ORDER) {
+            return inOrderIterator();
+        } else if (iteratorType == DEPTH_FIRST) {
+            return depthFirstIterator();
+        } else if (iteratorType == BREDTH_FIRST) {
+            return bredthFirstIterator();
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 }
