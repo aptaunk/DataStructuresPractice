@@ -1,6 +1,8 @@
 import java.lang.Math;
+import java.util.ListIterator;
+import java.util.Iterator;
 
-public class AdiDynamicArray<E>
+public class AdiDynamicArray<E> implements Iterable<E>
 {
     private Object[] elmentArray;
     private int size;
@@ -62,5 +64,45 @@ public class AdiDynamicArray<E>
     public void remove() {
         elmentArray[size-1] = null;
         size--;
+    }
+    
+    public ListIterator<E> listiterator() {
+        return new ListIterator<E>() {
+            private int nextIndex = 0;
+            private int lastPrevNext = -1;
+            public boolean hasNext() {
+                return nextIndex<size;
+            }
+            public boolean hasPrevious() {
+                return nextIndex>0;
+            }
+            public int nextIndex() {
+                return nextIndex;
+            }
+            public int previousIndex() {
+                return nextIndex-1;
+            }
+            public E next() {
+                lastPrevNext = nextIndex;
+                return get(++nextIndex);
+            }
+            public E previous() {
+                lastPrevNext = --nextIndex;
+                return get(nextIndex);
+            }
+            public void set(E e) {
+                AdiDynamicArray.this.set(lastPrevNext,e);
+            }
+            public void add(E e) {
+                throw new UnsupportedOperationException();
+            }
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+    
+    public Iterator<E> iterator() {
+        return listiterator();
     }
 }
