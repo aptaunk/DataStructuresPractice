@@ -233,7 +233,6 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return currKey;
             }
             public void remove() {
-                lastContains = null;
                 if (currKey == null) {
                     throw new IllegalStateException();
                 }
@@ -281,7 +280,6 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return currKey;
             }
             public void remove() {
-                lastContains = null;
                 if (currKey == null) {
                     throw new IllegalStateException();
                 }
@@ -329,7 +327,6 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
                 return currKey;
             }
             public void remove() {
-                lastContains = null;
                 if (currKey == null) {
                     throw new IllegalStateException();
                 }
