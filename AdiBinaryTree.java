@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
 {
@@ -164,6 +165,19 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
     }
     
     public Iterator<K> iterator() {
+        if (root == null) {
+            return new Iterator<K>() {
+                public boolean hasNext() {
+                    return false;
+                }
+                public K next() {
+                    throw new NoSuchElementException();
+                }
+                public void remove() {
+                    throw new IllegalStateException();
+                }
+            };
+        }
         return new Iterator<K>() {
             private AdiDynamicArray<AdiBinaryTreeNode<K,V>> bstIteratorStack;
             private AdiBinaryTreeNode<K,V> nextNode;
