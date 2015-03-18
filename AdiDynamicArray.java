@@ -1,6 +1,7 @@
 import java.lang.Math;
 import java.util.ListIterator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class AdiDynamicArray<E> implements Iterable<E>
 {
@@ -67,6 +68,37 @@ public class AdiDynamicArray<E> implements Iterable<E>
     }
     
     public ListIterator<E> listiterator() {
+        if (size == 0) {
+            return new ListIterator<E>() {
+                public boolean hasNext() {
+                    return false;
+                }
+                public boolean hasPrevious() {
+                    return false;
+                }
+                public int nextIndex() {
+                    return 0;
+                }
+                public int previousIndex() {
+                    return -1;
+                }
+                public E next() {
+                    throw new NoSuchElementException();
+                }
+                public E previous() {
+                    throw new NoSuchElementException();
+                }
+                public void set(E e) {
+                    throw new IllegalStateException();
+                }
+                public void add(E e) {
+                    throw new UnsupportedOperationException();
+                }
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }
         return new ListIterator<E>() {
             private int nextIndex = 0;
             private int lastPrevNext = -1;
