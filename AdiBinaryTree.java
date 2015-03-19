@@ -90,6 +90,14 @@ public class AdiBinaryTree<K extends Comparable<K>,V> implements Iterable<K>
         return search(key).val;
     }
     
+    public void set(K key, V val) {
+        if (lastContains != null && lastContains.key.equals(key)) {
+            lastContains.val = val;
+        } else {
+            search(key).val = val;
+        }
+    }
+    
     public void insert(K key, V val) {
         if (root == null) {
             root = new AdiBinaryTreeNode<K,V>(null,key,val);
