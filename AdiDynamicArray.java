@@ -116,11 +116,13 @@ public class AdiDynamicArray<E> implements Iterable<E>
             }
             public E next() {
                 lastPrevNext = nextIndex;
-                return get(++nextIndex);
+                nextIndex++;
+                return get(lastPrevNext);
             }
             public E previous() {
-                lastPrevNext = --nextIndex;
-                return get(nextIndex);
+                lastPrevNext = nextIndex-1;
+                nextIndex--;
+                return get(lastPrevNext);
             }
             public void set(E e) {
                 AdiDynamicArray.this.set(lastPrevNext,e);
