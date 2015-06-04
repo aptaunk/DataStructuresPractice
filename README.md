@@ -1,2 +1,2 @@
-# GoogleInterviewPractice
-Practice for my google interview
+# DataStructuesPractice
+Practice for creating common data structures
